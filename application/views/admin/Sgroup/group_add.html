@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<?php include CUR_VIEW_PATH."public/head.html"?>
+	 <!--编辑器-->
+	 <!-- 编辑器配置文件 -->
+     <script type="text/javascript" src="application/views/admin/js/ueditor/ueditor.config.js"></script>
+     <!-- 编辑器源码文件 -->
+     <script type="text/javascript" src="application/views/admin/js/ueditor/ueditor.all.js"></script>
+     <!-- 实例化编辑器 -->
+    
+</head>
+
+<body class="body-color">
+	<header>
+		<?php include CUR_VIEW_PATH."public/header.html"?>
+
+	</header>
+	<!--侧边菜单栏-->
+	<aside class="side-nav">
+		<?php include CUR_VIEW_PATH."public/aside.html"?>
+	</aside>
+	<!--侧边菜单栏 end-->
+
+	<!--主体部分-->
+	<section class="body-content">
+		<div class="site-location">
+			&nbsp;&nbsp;
+			<span class="ficon ficon-weizhi"></span>&nbsp;<a href="index.php?p=admin&c=index&a=index">用户首页</a>
+			&nbsp;&gt;&nbsp;<a href="index.php?p=admin&c=group&a=index">管理员组管理</a>
+			&nbsp;&gt;&nbsp;<a href="#">添加管理员组</a>
+		</div>
+		<br/>
+		
+    <form method="post" action="index.php?p=admin&c=group&a=insert" name='theForm' id="theForm" >
+			<table class="table table-info cs-table">
+				<tbody>
+					<tr>
+						<th style="width:60px" onclick="admin_js()">组名</th>
+						<td>
+							<input name="zuming" type="text" id="zuming" class="input"><font color="red">*</font>
+	                        <font color="red"></font>&nbsp;&nbsp;[<a href="javascript:admin_select(0)">全选</a>]&nbsp;[<a href="javascript:admin_select(1)">反选</a>]
+						</td>
+				    </tr>
+					<tr>
+						<th>参数</th>
+						<td>
+
+						<?php foreach ($lanmu as $k=>$v) {  $che_list++;   ?>
+
+							<table border="0" cellpadding="0" cellspacing="0"
+								style="width: 100%; text-align: left">
+								<tbody>
+									<tr>
+										<td style="font-weight: 700; font-size: 14px">
+										<input type="checkbox" data-id="qx_box_<?php echo $che_list ?>" name="colid[<?php echo $che_list ?>]"   value="<?php echo $v["id"] ?>">
+										<input name="classid[<?php echo $che_list ?>]" type="text" value="<?php echo $v["classid"] ?>"  class="yincang">
+										<input name="u1[<?php echo $che_list ?>]" type="text" value="<?php echo $v["u1"] ?>"  class="yincang">
+										<input name="u2[<?php echo $che_list ?>]" type="text" value="<?php echo $v["u2"] ?>"  class="yincang">
+										<input name="u3[<?php echo $che_list ?>]" type="text" value="<?php echo $v["u3"] ?>"  class="yincang">
+										<input name="u4[<?php echo $che_list ?>]" type="text" value="<?php echo $v["u4"] ?>"  class="yincang">
+										
+										<?php echo $v["u1"] ?>
+										</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<table border="0" cellpadding="0" cellspacing="0"
+								style="width: 100%; text-align: left">
+								<tbody>
+								
+								<?php foreach ($v["child"] as $k1=>$v1) {  $che_list++; ?>
+									<tr>
+										<td style="width: 50%">
+										 	&nbsp;&nbsp;&nbsp;&nbsp;
+										 	<input type="checkbox" data-id="qx_box_<?php echo $che_list ?>" name="colid[<?php echo $che_list ?>]"   value="<?php echo $v1["id"] ?>">
+											<input name="classid[<?php echo $che_list ?>]" type="text" value="<?php echo $v1["classid"] ?>"  class="yincang">
+											<input name="u1[<?php echo $che_list ?>]" type="text" value="<?php echo $v1["u1"] ?>"  class="yincang">
+											<input name="u2[<?php echo $che_list ?>]" type="text" value="<?php echo $v1["u2"] ?>"  class="yincang">
+											<input name="u3[<?php echo $che_list ?>]" type="text" value="<?php echo $v1["u3"] ?>"  class="yincang">
+											<input name="u4[<?php echo $che_list ?>]" type="text" value="<?php echo $v1["u4"] ?>"  class="yincang">
+											<span id="qx_txt_1"><?php echo $v1["u1"] ?></span>
+											<span id="qx_value_1" style="display: none">articles.aspx?Model_id=54&amp;classid=99</span>&nbsp;
+										</td>
+									</tr>
+								<?php } ?>
+									 
+								</tbody>
+							</table>
+							
+					    <?php } ?>
+					   
+					    </td>
+					 </tr>
+
+					<tr>
+
+						<th></th>
+						<td>
+						
+						<a href="#" class="btn btn-blue" onclick="$('#theForm').submit()">
+						    <em class="ficon ficon-queren"></em> 确认操作</a>&nbsp;&nbsp; 
+						    <a href="#" class="btn btn-green" onclick="if(confirm('确定清空重填?')==false)return false;window.location.reload()">
+						    <em class="ficon ficon-shanchu"></em> 清空重填</a></td>
+					</tr>
+					
+			</table>
+
+
+		</form>
+
+
+<footer>
+	<?php include CUR_VIEW_PATH."public/footer.html"?>
+</footer>
+</section>
+
+<p class="clear"></p>
+
+<script src="application/views/admin/js/wow.min.js" type="text/javascript"></script>
+<script src="application/views/admin/js/common.js" type="text/javascript"></script>
+
+<!--wow 初始化-->
+<script>
+	if(!(/msie [6|7|8|9]/i.test(navigator.userAgent))) {
+		new WOW().init();
+	};
+</script>
+<script type="text/javascript">
+	var che_list=<?php echo $che_list ?>;
+
+	function admin_select(g1) {
+		for (i = 1; i <= che_list; i++) {
+			//var boxes = document.getElementById("qx_box_" + i);  
+			var boxes = $("input[data-id='qx_box_"+i+"']");
+			for (var j = 0; j < boxes.length; j++) {
+				if (g1 == "0") {
+					boxes[j].checked = true;
+				} else {
+					if (boxes[j].checked) {
+						boxes[j].checked = false;
+					} else {
+						boxes[j].checked = true;
+					}
+				}
+			}
+		}
+	}
+</script>
+
+</body>
+
+</html>
