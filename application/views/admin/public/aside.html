@@ -6,8 +6,9 @@
 		</li>
 		            <?php 
 					 $asideModel = new LanmuModel('column_group');
-	                 $tiaojian_asideModel=array("u4"=>"显示","group_id"=>$_SESSION['admin']['group_id']);
-	                 $asideList=$asideModel->selectByArrayAndLanmu($tiaojian_asideModel);
+	                 //$tiaojian_asideModel=array("u4"=>"显示","group_id"=>$_SESSION['admin']['group_id']);
+	                 //$asideList=$asideModel->selectByArrayAndLanmu($tiaojian_asideModel);
+					 $asideList=$asideModel->select("select u3,u1,id,classid from sl_column_group where u4='显示' and group_id={$_SESSION['admin']['group_id']} ");
                      $asideList=$asideModel->child($asideList);
                      
                     ?>

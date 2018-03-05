@@ -6,18 +6,18 @@
 				<div class="nav-right">
 					<!--通知列表-->
 					<ul class="notice-list">
-						<!-- <li>
-							<a class="drop-tag">
+						<li>
+							<a href="/index.php?p=admin&c=autotable&a=index&model_id=90" class="drop-tag">
 								<span class="ficon ficon-gouwuche"></span>
-								<em class="notice-num">0</em>
+								<em class="notice-num" id="tongzhi_dingdan">0</em>
 							</a>
 						</li>
 						<li>
-							<a class="drop-tag">
+							<a href="/index.php?p=admin&c=autotable&a=index&model_id=80"  class="drop-tag">
 								<span class="ficon ficon-duanxin"></span>
-								<em class="notice-num">4</em>
+								<em class="notice-num"  id="tongzhi_wenda">0</em>
 							</a>
-						</li> -->
+						</li>
 						<li>
 				    		<a href="/index.php?p=admin" class="drop-tag" title="返回首页" target="_blank">
 				    		<span class="ficon ficon-shouye"></span>
@@ -89,3 +89,96 @@
 				
 				
 			</div>
+			
+			<script>
+			
+			
+			//不断刷新事件
+			 var int = self.setInterval("get_tongzhi()", 5000);
+			
+			//加载统计信息
+			function get_tongzhi() {
+				getData(true, 'get', web_url() + "/?type=search&t=dingdan", '', function(result) {
+					if(result.status == 'true') {
+						//console.log(result.msg);
+						var _data = JSON.parse(result.msg);
+						var dingdanshu = _data.length; //总数
+						var dingdan_yidu = getParam("dingdan_yidu");
+						if(dingdan_yidu == "" || dingdan_yidu == null) {
+							dingdan_yidu = 0;
+						}
+						var dingdan_weidu = 0; //未读回答数
+						dingdan_weidu = (Number(dingdanshu) - Number(dingdan_yidu))<0 ? "0": (Number(dingdanshu) - Number(dingdan_yidu));
+						console.log(dingdan_weidu==getParam("dingdan_weidu") );
+						//playSound("/public/dingdan.mp3");
+						//语音提示
+						if(Number(dingdan_weidu)>0 ) 						{
+							playSound("public/dingdan.mp3");
+						}
+                        //记录当前的未读数
+						//setParam("dingdan_weidu",dingdan_weidu);
+                        //修改界面数字
+                        $("#tongzhi_dingdan").html(dingdan_weidu);
+					}
+				});
+				
+				getData(true, 'get', web_url() + "/?type=search&t=wenti" , '', function(result) {
+					if(result.status == 'true') {
+						//console.log(result.msg);
+						var _data = JSON.parse(result.msg);
+						var tiwenshu = _data.length; //总数
+						var tiwenshu_yidu = getParam("tiwenshu_yidu");
+						if(tiwenshu_yidu == "" || tiwenshu_yidu == null) {
+							tiwenshu_yidu = 0;
+						}
+						var tiwenshu_weidu = 0; //未读回答数
+						tiwenshu_weidu = (Number(tiwenshu) - Number(tiwenshu_yidu))<0 ? "0": (Number(tiwenshu) - Number(tiwenshu_yidu));
+						//console.log(tiwenshu_weidu);
+						
+						//语音提示
+						if(Number(tiwenshu_weidu)>0 ) 	
+						{
+							playSound("public/tongzhi.mp3");
+						}
+                        //记录当前的未读数
+						//setParam("tiwenshu_weidu",tiwenshu_weidu);
+						 //修改界面数字
+                        $("#tongzhi_wenda").html(tiwenshu_weidu);
+					}
+				});
+
+			}
+			
+			
+			function web_url() {
+				return '';
+			}
+
+			function playSound(src){ 
+				var audio = new Audio(src);
+				audio.play();
+			} 
+			
+			function getData(asyncFlag, type, url, formData, callback) {
+				$.ajax({
+					async: asyncFlag,
+					type: type,
+					url: url,
+					data: formData,
+					contentType: "application/x-www-form-urlencoded; charset=utf-8",
+					success: function(data) {
+						callback(data);
+					}
+				});
+			}
+
+			function setParam(name, value) {
+				localStorage.setItem(name, value);
+			}
+
+			function getParam(name) {
+				return localStorage.getItem(name);
+			}
+			</script>
+			
+			

@@ -47,7 +47,9 @@ class Framework {
 		//载入核心类
 		include CORE_PATH . "Controller.class.php";
 		include CORE_PATH . "Model.class.php";
-		include DB_PATH . "Mysql.class.php";
+		include CORE_PATH . "ModelNew.class.php";//pdo操作的新model类-->ghy
+		include DB_PATH . "Mysql.class.php";//mysql类
+		include DB_PATH . "CPdo.class.php";//pdo类-->ghy
 
         include LIB_PATH . "Common.class.php";
        // include LIB_PATH . "Page.class.php";

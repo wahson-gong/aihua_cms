@@ -619,6 +619,7 @@ class IndexController extends   BaseController {
 	            //1.收集表单数据
 	            $data=$tableModel->getFieldArray();
 	            $data['laiyuanbianhao']=$laiyuanbianhao;
+	            $data['quanbutiwen']=$data['yonghuming'];
 	            //2.验证和处理
 	            $this->helper('input');
 	            $data = deepspecialchars($data);
@@ -630,7 +631,7 @@ class IndexController extends   BaseController {
 	                //寻找有没有匹配的回答，如果有自动回答
 	                $wenti=$data['neirong'];
 	                $zidonghuidaModel = new Model("zidonghuida");
-	                $zidonghuida = $zidonghuidaModel->select("SELECT * from sl_zidonghuida  where wenti like '%{$wenti}%'");
+	                $zidonghuida = $zidonghuidaModel->select("SELECT * from sl_zidonghuida  where wenti='{$wenti}' ");
 	               //echo "SELECT * from sl_zidonghuida  where wenti like '%{$wenti}%'";die();
 	                if(count($zidonghuida)>0)
 	                {
@@ -1094,10 +1095,12 @@ class IndexController extends   BaseController {
 	            $dingdan_model = new Model("dingdan");
 	            $dingdanhao = $commom->SafeFilterStr($_REQUEST["dingdanhao"]);
 	            $dingdan = $dingdan_model ->selectByCol("dingdanhao", $dingdanhao);
+	            $zhifufangshi = $commom->SafeFilterStr($_REQUEST["zhifufangshi"]);
 	            //var_dump($dingdan);die();
 	            //修改订单号
 	            $data_dingdan["id"]=$dingdan["id"];
 	            $data_dingdan["dingdanzhuangtai"]="已支付";
+	            $data_dingdan["zhifufangshi"]=$zhifufangshi;
 	            $dingdan_model->update($data_dingdan);
 	            //修改订单对于的购物车的订单号，表示已支付
 	            $gouwuche_ids=$dingdan["shangpin"];
@@ -1107,6 +1110,11 @@ class IndexController extends   BaseController {
 	            
 	            $rdata['status'] = "true";
 	            $rdata['msg']="下单成功";
+	        
+	        } else if($type=="ioskaiguan")
+	        {
+	            //支付成功接口后的回调接口
+	            echo "off";die();
 	        
 	        }
 	        else if($type=="随便自己命名的方法")

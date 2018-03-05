@@ -3,12 +3,12 @@
 class LanmuModel extends Model {
 	//获取所有的商品类型
 	public function getLanmuByclassid($classid){
-		$sql = "SELECT * FROM {$this->table}  " ;
+		$sql = "SELECT *,u1 as name,classid as parentid  FROM {$this->table}  " ;
 		if($classid!='')
 		{
 			$sql.=" where classid='$classid' ";
 		}
-		$sql.=" order by u2 asc,id desc";
+		$sql.=" order by u2 asc,id asc";
 
 		return $this->db->getAll($sql);
 		//对获取的分类进行重新排序
@@ -42,6 +42,7 @@ class LanmuModel extends Model {
 				//$v['child'] = $temp;
 				$v['child'] = $this->child($arr,$v['id']);
 				$res[] = $v;
+				unset($v);
 			}
 			
 		}

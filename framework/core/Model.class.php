@@ -64,6 +64,31 @@ class Model
         return $result;
     }
 
+    
+    /**
+     * 根据传递的参数，自动获得SQL的条件语句
+     */
+    public function getSqlWhereStrBylike()
+    {
+        $sql="";
+        $fields_temp = $this->fields;
+        $fields_temp = array_unique($fields_temp);
+        foreach ($fields_temp as $k => $v) {
+            if (isset($_REQUEST[$v]) && $_REQUEST[$v] != '') {
+                if($sql=="")
+                {
+                    $sql =  $v . " like '%{$_REQUEST[$v]}%'  ";
+                }else
+                {
+                    $sql = $sql."  or " . $v . " like '%{$_REQUEST[$v]}%' ";
+                }
+    
+            }
+        }
+        return $sql;
+    }
+    
+    
     /**
      * 根据传递的参数，返回接收数组
      */

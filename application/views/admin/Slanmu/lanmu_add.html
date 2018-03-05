@@ -38,22 +38,16 @@
 						<select name="classid" id="classid" class="select-container1">
                       
 							<option value="0">顶级栏目</option>
-                            <?php foreach ($classidArray as $column):?>
-                            
-                            <?php
-                             if($id==$column['id'])  
-                            {?>
-							<option value="<?php echo $column['id'] ?>" selected="selected">
-							<?php echo $column['u1'] ?>
-							</option>
-                            <?php 
-                            }
-                            else{
-                            ?>
-                            <option value="<?php echo $column['id'] ?>" ><?php echo $column['u1'] ?><?php echo $classid ?></option>
-                            <?php }?>
-							<?php endforeach;?>
+                            <?php echo $html_option ?>
 						</select>
+						
+						<script >
+	  		            
+						$("#classid").val("<?php echo $id ?>");
+	  		
+	  					</script>
+	  	
+						
 					</td>
 				</tr>
 				<tr>

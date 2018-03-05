@@ -17,7 +17,7 @@ class AutotableController extends BaseController{
 	        $u6 = $_REQUEST['u6'];
 	    }
 	   
-	    $where = " 1=1 ";
+	    $where = "";
 	    // 获得当前表名
 	    $moxingModel = new MoxingModel("moxing");
 	    $tableName = $moxingModel->oneRowCol("u1", "id={$model_id}")['u1'];
@@ -26,7 +26,14 @@ class AutotableController extends BaseController{
 	    //查询条件
 	    if(trim(str_replace("1=1", " ", $tableModel->getSqlWhereStr()))!="")
 	    {
-	        $where .= " and ".$tableModel->getSqlWhereStr();
+	        if($where=="")
+	        {
+	            $where = $tableModel->getSqlWhereStr();
+	        }else 
+	        {
+	            $where .= " and ".$tableModel->getSqlWhereStr();
+	        }
+	        
 	    }
 	     
 	    //得到字段模型
@@ -36,18 +43,25 @@ class AutotableController extends BaseController{
 	        $filedListU6=$filedModel->select("select * from sl_filed where model_id='{$model_id}' and u6='是' ");//模糊查询字段
 	        if(count($filedListU6)>0)
 	        {
-	            $where=$where." and ";
 	            foreach ($filedListU6 as $v)
 	            {
-	                $where=$where."  {$v['u1']} like '%{$u6}%' or ";
+	                $_where=$_where."   {$v['u1']} like '%{$u6}%' or ";
 	            }
-	            $where=$where." 1=2 ";
+	            $_where.=" 1=2 ";
+    	        if($where=="")
+    	        {
+    	            $where=$_where;
+	           
+    	        }else 
+    	        {
+    	            $where=$where." and (". $_where.")";
+    	        }
 	        }
 	    
 	    }
+	    //echo $where ;die();
 	    //需要显示的字段
 	    $filedLists=$filedModel->select("select * from sl_filed where model_id='{$model_id}' and u5='是' order by u10 asc ");//显示查询字段
-	    
 	   
 	    // 载入分页类
 	    include LIB_PATH . "Page.class.php";
@@ -109,6 +123,10 @@ class AutotableController extends BaseController{
 
 	//定义insert方法，完成自动表的插入
 	public function insertAction(){
+	    //处理文件上传,需要使用到Upload.class.php
+	    $this->library("Upload"); //载入文件上传类
+	    $upload = new Upload(); //实例化上传对象
+	    
 	    $model_id = $_REQUEST['model_id'];
 	    // 获得当前表名
 	    $moxingModel = new MoxingModel("moxing");
@@ -137,6 +155,7 @@ class AutotableController extends BaseController{
 	            $data[$v['u1']]= date('Y-m-d H:i:s',time());
 	        }
 	    }
+	    
 	    //如果字段设置为文件和图片
 	    foreach ($filedAraay as $v)
 	    {
@@ -146,9 +165,8 @@ class AutotableController extends BaseController{
 	        {
 	            //echo "select * from sl_filed where  u7='图片'  and model_id='{$model_id}' and u1='{$v['u1']}'  <br>";
 	            //$data[$v['u1']]= date('Y-m-d H:i:s',time());
-	            //处理文件上传,需要使用到Upload.class.php
-	            $this->library("Upload"); //载入文件上传类
-	            $upload = new Upload(); //实例化上传对象
+	           
+	           
 	            if ($filename = $upload->up($_FILES[$v['u1']])){
 	                //成功
 	                $data[$v['u1']] = $filename;

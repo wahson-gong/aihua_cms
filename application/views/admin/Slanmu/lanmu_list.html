@@ -55,7 +55,7 @@
 				<tr>
 
 					<th style="width:6%">编号</th>
-					<th>栏目名</th>
+					<th  style="width:10%">栏目名</th>
 					<th style="width:6%" class="hidden-xs">排序</th>
 					<th class="hidden-xs">链接</th>
 					<th style="width:6%" class="hidden-xs">显示</th>
@@ -64,18 +64,9 @@
 			</thead>
 			<tbody>
 
-<?php	
-if($queryStr['u1']=='')
-{
-$LanmuModel->tree_ghy($classidArray);
-}else
-{
-//显示查询结果
-$colTemp=$LanmuModel->selectByArray($queryStr);
-$LanmuModel->load_lianmuLists($colTemp);
-}
-
-?>
+			<?php	
+			echo $html;
+ 			?>
 
 
 </tbody>

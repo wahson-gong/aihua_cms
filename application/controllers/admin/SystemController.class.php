@@ -33,7 +33,7 @@ class SystemController extends BaseController{
 		//获取brand总的记录数
 		$total = $systemModel->total($where);
 		//指定分页数，每一页显示的记录数
-		 $pagesize = 10;
+		 $pagesize = 20;
 		// $pagesize = $GLOBALS['config']['pagesize'];
 		//获取当前页数，默认是1
 		$current = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -41,11 +41,13 @@ class SystemController extends BaseController{
 		//使用模型完成数据的查询
 		$systems = $systemModel->pageRows($offset,$pagesize,$where);
 		//使用分页类获取分页信息
+		//echo $total." | ".$pagesize." | ".$current;die();
 		$page = new Page($total,$pagesize,$current,"index.php",array("p"=>"admin","c"=>"system","a"=>"index"));
 		$pageinfo = $page->showPage();
 		
 	    foreach ($systems as $k=>$v)
 	    {
+	        //查询ip的地址
 	        //$systems[$k]['address']=$Common->getIPAddress(trim($systems[$k]['u3']));
 	        $systems[$k]['address']="";
 	    }
